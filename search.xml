@@ -1,6 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>IPv6的開通使用</title>
+    <url>/posts/2/</url>
+    <content><![CDATA[<h2 id="一、判斷光貓-amp-x2F-路由器是否支持IPv6"><a href="#一、判斷光貓-amp-x2F-路由器是否支持IPv6" class="headerlink" title="一、判斷光貓&amp;&#x2F;路由器是否支持IPv6"></a>一、判斷光貓&amp;&#x2F;路由器是否支持IPv6</h2><p>近年以來的光貓與路由器設備基本全面支持IPv6功能，可在設備的管理頁面進行確認。</p>
+<p>如支持IPv6，直接進行相關設置即可，網路上有豐富的說明文檔。本文特針對光貓支持IPv6而路由器不支持IPv6的情況進行說明。</p>
+<h2 id="二、配置環境與名詞解釋"><a href="#二、配置環境與名詞解釋" class="headerlink" title="二、配置環境與名詞解釋"></a>二、配置環境與名詞解釋</h2><p>網路：中國聯通；</p>
+<p>地點：河南省某市某縣；</p>
+<p>光貓：即光調製解調器（兼有一級路由功能），作用是將光信號轉為電信號；</p>
+<p>路由器：特指二級路由器，在本文中實際不使用其路由功能（目的是減少NAT層數），作用是將有線信號轉為無線信號使用（AP）；</p>
+<h2 id="三、思路"><a href="#三、思路" class="headerlink" title="三、思路"></a>三、思路</h2><p>光貓撥號，路由器AP。</p>
+<h2 id="四、步驟"><a href="#四、步驟" class="headerlink" title="四、步驟"></a>四、步驟</h2><h3 id="1-獲取光貓管理員賬號-amp-密碼"><a href="#1-獲取光貓管理員賬號-amp-密碼" class="headerlink" title="1.獲取光貓管理員賬號&amp;密碼"></a>1.獲取光貓管理員賬號&amp;密碼</h3><p>若網路中的一些通用賬號&amp;密碼不適用，可按照以下步驟進行操作：</p>
+<h4 id="（1）登錄光貓管理頁面"><a href="#（1）登錄光貓管理頁面" class="headerlink" title="（1）登錄光貓管理頁面"></a>（1）登錄光貓管理頁面</h4><p>使用光貓背面用戶賬號密碼登錄<font size=2><code>http://192.168.1.1</code></font>，用户名可能並非完全一致，可嘗試<font size=2><code>user</code></font>；</p>
+<h4 id="（2）啟用FTP服務和Telnet服務"><a href="#（2）啟用FTP服務和Telnet服務" class="headerlink" title="（2）啟用FTP服務和Telnet服務"></a>（2）啟用FTP服務和Telnet服務</h4><p>轉到<font size=2><code>http://192.168.1.1/servmngr.html</code></font>，勾選<font size=2><code>啟用FTP服務</code></font>，設置用戶名和密碼为<font size=2><code>admin</code></font>，<br>勾選<font size=2><code>啟用Telnet服務</code></font>，設置用戶名和密碼为<font size=2><code>admin</code></font>，並點擊<font size=2><code>保存/應用</code></font>；</p>
+<h4 id="（3）獲取光貓備份配置文件"><a href="#（3）獲取光貓備份配置文件" class="headerlink" title="（3）獲取光貓備份配置文件"></a>（3）獲取光貓備份配置文件</h4><p>在<font size=2><code>控制面板/程序和功能/啟用或關閉Windows功能</code></font>中，勾選<font size=2><code>Telnet客戶端</code></font>；在<font size=2><code>cmd</code></font>中輸入</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Telnet 192.168.1.1</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Login:</span><br><span class="line">Password:</span><br></pre></td></tr></table></figure>
+<p>均輸入<font size=2><code>admin</code></font>（其中密碼欄不會顯示），完成後輸入</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">gendefsettings</span><br></pre></td></tr></table></figure>
+<p>得到結果</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">generate config file OK!!!</span><br></pre></td></tr></table></figure>
+
+<h4 id="（4）使用FTP工具配置文件"><a href="#（4）使用FTP工具配置文件" class="headerlink" title="（4）使用FTP工具配置文件"></a>（4）使用FTP工具配置文件</h4><p>以8uftp軟體为例，地址欄輸入<font size=2><code>192.168.1.1</code></font>，用戶名和密碼為<font size=2><code>admin</code></font>並連接，在右側目錄找到<font size=2><code>fhconf/backpresettings.conf</code></font>，雙擊後將會保存至<font size=2><code>此電腦/文檔</code></font>，使用Notepad++打開。</p>
+<h4 id="（5）管理員賬號-amp-密碼查詢"><a href="#（5）管理員賬號-amp-密碼查詢" class="headerlink" title="（5）管理員賬號&amp;密碼查詢"></a>（5）管理員賬號&amp;密碼查詢</h4><p>在打開的文件中搜索<font size=2><code>UserPassword</code></font>或<font size=2><code>AdminPassword</code></font>，複製<font size=2><code>&lt;web&gt;</code></font>中<font size=2><code>&lt;AdminPassword&gt;</code></font>字段的黑色加粗部分，並在Base64解密网站（如<a href="https://base64.us/">https://base64.us</a>）中解密，得到格式為<font size=2><code>cuadmin</code></font>+8位数字的結果，即為密碼。</p>
+<h3 id="2-登錄光貓管理頁面查看IPv6相關信息"><a href="#2-登錄光貓管理頁面查看IPv6相關信息" class="headerlink" title="2.登錄光貓管理頁面查看IPv6相關信息"></a>2.登錄光貓管理頁面查看IPv6相關信息</h3><p>登錄<font size=2><code>http://192.168.1.1/cu.html</code></font>，用戶名為<font size=2><code>CUAdmin</code></font>，密碼為上述步骤1的結果。</p>
+<p>如成功登錄，將步驟1中的第（2）步設置還原，即關閉FTP服務和Telnet服務。</p>
+<p>在用戶側信息中可以查詢到IPv6的位址、前綴、網關等。</p>
+<h3 id="3-路由器設置"><a href="#3-路由器設置" class="headerlink" title="3.路由器設置"></a>3.路由器設置</h3><p>登錄路由器配置頁面，將<font size=2><code>路由模式/動態IP模式</code></font>改為<font size=2><code>AP模式</code></font>，即完成。</p>
+<p>可通過<font size=2><code>cmd</code></font>輸入</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ipconfig</span><br></pre></td></tr></table></figure>
+<p>查詢IPv6位址，或相關IPv6測試網站測試。</p>
+<p>此後將不能通過之前設置的地址登錄路由器管理頁面，需在光貓管理頁面的用戶側信息中查詢LAN口內網IP位址（這是由於AP模式下的路由器作為光貓的一個下級設備被光貓分配了新的內網IP位址）。</p>
+<h2 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h2><p><strong>·<a href="https://blog.csdn.net/Adam12321/article/details/108369917">联通宽带光猫获取超级密码教程！！</a></strong></p>
+<p><strong>·本人亲自实践。</strong></p>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+  </entry>
+  <entry>
     <title>本站搭建歷程</title>
     <url>/posts/1/</url>
     <content><![CDATA[<p><strong>2022年10月6日著手建站，至10月8日基本建立完成，10月9日幾乎完成所有配置並撰寫本文，歷時三天。</strong></p>
@@ -174,44 +212,6 @@
 
 <p><em><strong><font size=7>To be continued…</font></strong></em></p>
 <h2 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h2><p><strong>本人（站長）在此對以下（包括但不限於）教程資料及其創作者表示衷心的感謝。</strong><br><strong>·<a href="https://hexo.io/zh-tw/docs/index.html">文档|Hexo</a></strong><br><strong>·<a href="https://zhuanlan.zhihu.com/p/511211468">Hexo+Github博客搭建教程</a></strong><br><strong>·<a href="https://zhuanlan.zhihu.com/p/35668237?utm_medium=social&utm_oi=670339112213680128">超详细Hexo+Github博客搭建小白教程</a></strong><br><strong>·<a href="https://zhuanlan.zhihu.com/p/111614119">Github + Hexo 搭建个人博客超详细教程</a></strong><br><strong>·<a href="http://yearito.cn/posts/hexo-get-started.html">Hexo 搭建个人博客系列：基础建站篇 </a></strong><br><strong>·<a href="https://www.jianshu.com/p/1f8107a8778c">hexo搭建个人博客–NexT主题优化</a></strong><br><strong>·<a href="http://theme-next.iissnan.com/theme-settings.html#fonts-customization">主题配置-NexT使用文档</a></strong><br><strong>·<a href="https://www.jianshu.com/p/8131ffab3feb">Next主题配置详解</a></strong><br><strong>·<a href="https://blog.csdn.net/Growing_potato/article/details/113926856">next主题美化——背景图片、页面透明化、阴影、圆角、动画</a></strong><br><strong>·<a href="https://blog.csdn.net/qq_42912469/article/details/122365088">hexo下next主题的优化</a></strong><br><strong>·<a href="https://blog.csdn.net/nightmare_dimple/article/details/86661502?ops_request_misc=%25257B%252522request%25255Fid%252522%25253A%252522160808878519721942262725%252522%25252C%252522scm%252522%25253A%25252220140713.130102334..%252522%25257D&request_id=160808878519721942262725&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_click~default-1-86661502.nonecase&utm_term=next%E4%B8%BB%E9%A2%98">Hexo博客优化之Next主题美化</a></strong><br><strong>·<a href="https://blog.csdn.net/wang_123_zy/article/details/87181892">Hexo添加Live2D看板娘+模型预览</a></strong><br><strong>·<a href="http://shenzekun.cn/hexo%E7%9A%84next%E4%B8%BB%E9%A2%98%E4%B8%AA%E6%80%A7%E5%8C%96%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B.html">hexo的next主题个性化教程:打造炫酷网站</a></strong><br><strong>·<a href="https://tru-xu.github.io/2019/05/10/hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E8%B8%A9%E5%9D%91/">hexo搭建博客踩坑 </a></strong><br><strong>……</strong></p>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>IPv6的開通使用</title>
-    <url>/posts/2/</url>
-    <content><![CDATA[<h2 id="一、判斷光貓-amp-x2F-路由器是否支持IPv6"><a href="#一、判斷光貓-amp-x2F-路由器是否支持IPv6" class="headerlink" title="一、判斷光貓&amp;&#x2F;路由器是否支持IPv6"></a>一、判斷光貓&amp;&#x2F;路由器是否支持IPv6</h2><p>近年以來的光貓與路由器設備基本全面支持IPv6功能，可在設備的管理頁面進行確認。</p>
-<p>如支持IPv6，直接進行相關設置即可，網路上有豐富的說明文檔。本文特針對光貓支持IPv6而路由器不支持IPv6的情況進行說明。</p>
-<h2 id="二、配置環境與名詞解釋"><a href="#二、配置環境與名詞解釋" class="headerlink" title="二、配置環境與名詞解釋"></a>二、配置環境與名詞解釋</h2><p>網路：中國聯通；</p>
-<p>地點：河南省某市某縣；</p>
-<p>光貓：即光調製解調器（兼有一級路由功能），作用是將光信號轉為電信號；</p>
-<p>路由器：特指二級路由器，在本文中實際不使用其路由功能（目的是減少NAT層數），作用是將有線信號轉為無線信號使用（AP）；</p>
-<h2 id="三、思路"><a href="#三、思路" class="headerlink" title="三、思路"></a>三、思路</h2><p>光貓撥號，路由器AP。</p>
-<h2 id="四、步驟"><a href="#四、步驟" class="headerlink" title="四、步驟"></a>四、步驟</h2><h3 id="1-獲取光貓管理員賬號-amp-密碼"><a href="#1-獲取光貓管理員賬號-amp-密碼" class="headerlink" title="1.獲取光貓管理員賬號&amp;密碼"></a>1.獲取光貓管理員賬號&amp;密碼</h3><p>若網路中的一些通用賬號&amp;密碼不適用，可按照以下步驟進行操作：</p>
-<h4 id="（1）登錄光貓管理頁面"><a href="#（1）登錄光貓管理頁面" class="headerlink" title="（1）登錄光貓管理頁面"></a>（1）登錄光貓管理頁面</h4><p>使用光貓背面用戶賬號密碼登錄<font size=2><code>http://192.168.1.1</code></font>，用户名可能並非完全一致，可嘗試<font size=2><code>user</code></font>；</p>
-<h4 id="（2）啟用FTP服務和Telnet服務"><a href="#（2）啟用FTP服務和Telnet服務" class="headerlink" title="（2）啟用FTP服務和Telnet服務"></a>（2）啟用FTP服務和Telnet服務</h4><p>轉到<font size=2><code>http://192.168.1.1/servmngr.html</code></font>，勾選<font size=2><code>啟用FTP服務</code></font>，設置用戶名和密碼为<font size=2><code>admin</code></font>，<br>勾選<font size=2><code>啟用Telnet服務</code></font>，設置用戶名和密碼为<font size=2><code>admin</code></font>，並點擊<font size=2><code>保存/應用</code></font>；</p>
-<h4 id="（3）獲取光貓備份配置文件"><a href="#（3）獲取光貓備份配置文件" class="headerlink" title="（3）獲取光貓備份配置文件"></a>（3）獲取光貓備份配置文件</h4><p>在<font size=2><code>控制面板/程序和功能/啟用或關閉Windows功能</code></font>中，勾選<font size=2><code>Telnet客戶端</code></font>；在<font size=2><code>cmd</code></font>中輸入</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Telnet 192.168.1.1</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Login:</span><br><span class="line">Password:</span><br></pre></td></tr></table></figure>
-<p>均輸入<font size=2><code>admin</code></font>（其中密碼欄不會顯示），完成後輸入</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">gendefsettings</span><br></pre></td></tr></table></figure>
-<p>得到結果</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">generate config file OK!!!</span><br></pre></td></tr></table></figure>
-
-<h4 id="（4）使用FTP工具配置文件"><a href="#（4）使用FTP工具配置文件" class="headerlink" title="（4）使用FTP工具配置文件"></a>（4）使用FTP工具配置文件</h4><p>以8uftp軟體为例，地址欄輸入<font size=2><code>192.168.1.1</code></font>，用戶名和密碼為<font size=2><code>admin</code></font>並連接，在右側目錄找到<font size=2><code>fhconf/backpresettings.conf</code></font>，雙擊後將會保存至<font size=2><code>此電腦/文檔</code></font>，使用Notepad++打開。</p>
-<h4 id="（5）管理員賬號-amp-密碼查詢"><a href="#（5）管理員賬號-amp-密碼查詢" class="headerlink" title="（5）管理員賬號&amp;密碼查詢"></a>（5）管理員賬號&amp;密碼查詢</h4><p>在打開的文件中搜索<font size=2><code>UserPassword</code></font>或<font size=2><code>AdminPassword</code></font>，複製<font size=2><code>&lt;web&gt;</code></font>中<font size=2><code>&lt;AdminPassword&gt;</code></font>字段的黑色加粗部分，並在Base64解密网站（如<a href="https://base64.us/">https://base64.us</a>）中解密，得到格式為<font size=2><code>cuadmin</code></font>+8位数字的結果，即為密碼。</p>
-<h3 id="2-登錄光貓管理頁面查看IPv6相關信息"><a href="#2-登錄光貓管理頁面查看IPv6相關信息" class="headerlink" title="2.登錄光貓管理頁面查看IPv6相關信息"></a>2.登錄光貓管理頁面查看IPv6相關信息</h3><p>登錄<font size=2><code>http://192.168.1.1/cu.html</code></font>，用戶名為<font size=2><code>CUAdmin</code></font>，密碼為上述步骤1的結果。</p>
-<p>如成功登錄，將步驟1中的第（2）步設置還原，即關閉FTP服務和Telnet服務。</p>
-<p>在用戶側信息中可以查詢到IPv6的位址、前綴、網關等。</p>
-<h3 id="3-路由器設置"><a href="#3-路由器設置" class="headerlink" title="3.路由器設置"></a>3.路由器設置</h3><p>登錄路由器配置頁面，將<font size=2><code>路由模式/動態IP模式</code></font>改為<font size=2><code>AP模式</code></font>，即完成。</p>
-<p>可通過<font size=2><code>cmd</code></font>輸入</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ipconfig</span><br></pre></td></tr></table></figure>
-<p>查詢IPv6位址，或相關IPv6測試網站測試。</p>
-<p>此後將不能通過之前設置的地址登錄路由器管理頁面，需在光貓管理頁面的用戶側信息中查詢LAN口內網IP位址（這是由於AP模式下的路由器作為光貓的一個下級設備被光貓分配了新的內網IP位址）。</p>
-<h2 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h2><p><strong>·<a href="https://blog.csdn.net/Adam12321/article/details/108369917">联通宽带光猫获取超级密码教程！！</a></strong></p>
-<p><strong>·本人亲自实践。</strong></p>
 ]]></content>
       <categories>
         <category>技術</category>
